@@ -1,7 +1,6 @@
 import tweepy
 import pafy
 from tkinter import *
-from tkinter import *
 
 class Application:
     def __init__(self, master=None):
@@ -43,15 +42,12 @@ class Application:
 
         self.mensagem = Label(self.quartoContainer, text="", font=self.fontePadrao)
         self.mensagem.pack()
-        
-    #Método verificar senha
+
     def verificaURL(self):
         try:
             url = self.nome.get()
             video = pafy.new(url)
             allstreams = video.allstreams
-            #for s in allstreams:
-                #print(s.mediatype, s.extension, s.quality)
             bestaudio = video.getbestaudio()
             tituloVideo = video.title
             filename = bestaudio.download(filepath=f"D:\Downloads\Vídeos\{tituloVideo}.mp3", meta=True, quiet=False)
