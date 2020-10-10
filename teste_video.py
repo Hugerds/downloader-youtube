@@ -1,44 +1,66 @@
 import tweepy
 import pafy
+from tkinter import *
+from tkinter import *
 
-url = ("https://www.youtube.com/watch?v=ctQJpfuhoN8")
-video = pafy.new(url)
-streams = video.streams
-#for s in streams:
-   # print(s.resolution, s.extension, s.get_filesize(), s.url)
+class Application:
+    def __init__(self, master=None):
+        self.fontePadrao = ("Arial", "10")
+        self.primeiroContainer = Frame(master)
+        self.primeiroContainer["pady"] = 20
+        self.primeiroContainer.pack()
 
-#audiostreams = video.audiostreams
-#for a in audiostreams:
- #   print(a.bitrate, a.extension, a.get_filesize())
+        self.segundoContainer = Frame(master)
+        self.segundoContainer["padx"] = 40
+        self.segundoContainer.pack()
 
-def mycb(total, recvd, ratio, rate, eta):
-    #print(recvd, ratio, eta)
-    print(f"Em andamento...\n")
+        self.terceiroContainer = Frame(master)
+        self.terceiroContainer["padx"] = 40
+        self.terceiroContainer.pack()
 
-allstreams = video.allstreams
-for s in allstreams:
-    print(s.mediatype, s.extension, s.quality)
+        self.quartoContainer = Frame(master)
+        self.quartoContainer["pady"] = 40
+        self.quartoContainer.pack()
 
-bestvideo = video.getbestvideo()
-bestaudio = video.getbestaudio()
-tituloVideo = video.title
-op = str(input("Deseja baixar em audio ou video?\nSua opção: "))
-if "audio" in op:
-    filename = bestaudio.download(filepath=f"D:\Downloads\Vídeos\{tituloVideo}.mp3", meta=True, quiet=False, callback=mycb)
-    print(f"audio")
-if "video" in op:
-    filename = bestvideo.download(filepath=f"D:\Downloads\Vídeos\{tituloVideo}", meta=True, quiet=False, callback=mycb)
-    print(f"video")
+        self.titulo = Label(self.primeiroContainer, text="DOWNLOAD MÚSICAS YOUTUBE")
+        self.titulo["font"] = ("Arial", "10", "bold")
+        self.titulo.pack()
 
-""""
-url = ("https://www.youtube.com/watch?v=ctQJpfuhoN8")
-video = pafy.new(url)
-print(f"{s.resolution},{s.get_filesize()}, {s.url}")
-best = video.getbest()
-bestaudio = video.getbestaudio()
+        self.nomeLabel = Label(self.segundoContainer,text="INSIRA O URL DO VÍDEO", font=self.fontePadrao)
+        self.nomeLabel.pack(side=BOTTOM)
 
-print(f"{best.resolution}, {best.extension}")
-print(f"URL: {best.url}")
-#filename = audiostreams.download(filepath="D:\Downloads\Vídeos")
-filename = bestaudio.download(filepath="D:\Downloads\Vídeos")
-"""
+        self.nome = Entry(self.segundoContainer)
+        self.nome["width"] = 60
+        self.nome["font"] = self.fontePadrao
+        self.nome.pack(side=LEFT)
+
+        self.autenticar = Button(self.quartoContainer)
+        self.autenticar["text"] = "Baixar vídeo"
+        self.autenticar["font"] = ("Arial", "12")
+        self.autenticar["width"] = 12
+        self.autenticar["command"] = self.verificaURL
+        self.autenticar.pack()
+
+        self.mensagem = Label(self.quartoContainer, text="", font=self.fontePadrao)
+        self.mensagem.pack()
+        
+    #Método verificar senha
+    def verificaURL(self):
+        try:
+            url = self.nome.get()
+            video = pafy.new(url)
+            allstreams = video.allstreams
+            #for s in allstreams:
+                #print(s.mediatype, s.extension, s.quality)
+            bestaudio = video.getbestaudio()
+            tituloVideo = video.title
+            filename = bestaudio.download(filepath=f"D:\Downloads\Vídeos\{tituloVideo}.mp3", meta=True, quiet=False)
+            print(f"audio")
+        except OSError:
+            self.erroLabel = Label(self.quintoContainer, text="VERIFIQUE A PASTA DE INSTALAÇÃO", font=self.fontePadrao)
+            self.erroLabel.pack(side=LEFT)
+            print("da nao")
+
+root = Tk()
+Application(root)
+root.mainloop()
